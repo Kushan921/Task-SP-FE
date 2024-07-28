@@ -10,7 +10,7 @@ const PagesTasks = () => {
   // Function to fetch data from the URL
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/task/');
+      const response = await axios.get('task-sp-production.up.railway.app/task/');
       const currentWeekTasks = filterCurrentWeekTasks(response.data);
       const groupedByDesigner = groupTasksByDesigner(currentWeekTasks);
       setDesigners(Object.keys(groupedByDesigner));

@@ -17,7 +17,7 @@ const AddUser = () => {
     e.preventDefault();
     console.log(formData.role);
     axios
-      .post('http://localhost:8080/user/add', formData)
+      .post('task-sp-production.up.railway.app/user/add', formData)
       .then((res) => {
         console.log(res);
 

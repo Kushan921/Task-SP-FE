@@ -27,7 +27,7 @@ const DisplayContent = () => {
   const fetchContentsForToday = async () => {
     try {
       // Make a GET request to fetch contents for today
-      const response = await axios.get('http://localhost:8080/content/');
+      const response = await axios.get('task-sp-production.up.railway.app/content/');
       setContents(response.data);
     } catch (error) {
       console.error('Error fetching contents:', error);

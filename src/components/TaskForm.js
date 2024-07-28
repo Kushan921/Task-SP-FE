@@ -20,7 +20,7 @@ const TaskForm = () => {
   function handleSubmit(e){
     e.preventDefault();
 console.log(formData);
-    axios.post('http://localhost:8080/task/add',formData).then((res)=>{
+    axios.post('task-sp-production.up.railway.app/task/add',formData).then((res)=>{
       console.log(res);
       
        toast.success('Task Added Successfully:',{

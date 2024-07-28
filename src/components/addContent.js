@@ -24,7 +24,7 @@ const AddContent = () => {
       username: username // Add username to the form data
     };
     console.log(dataToSend);
-    axios.post('http://localhost:8080/content/add', dataToSend)
+    axios.post('task-sp-production.up.railway.app/content/add', dataToSend)
       .then((res) => {
         console.log(res);
         toast.success('Content Added Successfully:', {

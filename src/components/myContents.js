@@ -11,7 +11,7 @@ const MyContents = () => {
 
   useEffect(() => {
     console.log("s",username);
-    axios.get(`http://localhost:8080/content/${username}`) 
+    axios.get(`task-sp-production.up.railway.app/content/${username}`) 
       .then(response => {
         console.log(response);
         console.log(response.data);
@@ -35,7 +35,7 @@ const MyContents = () => {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8080/content/delete/${contentToDelete}`);
+      await axios.delete(`task-sp-production.up.railway.app/content/delete/${contentToDelete}`);
       setContents(prevContents => prevContents.filter(content => content._id !== contentToDelete));
       console.log(`Content with ID ${contentToDelete} deleted successfully`);
     } catch (error) {
@@ -46,10 +46,10 @@ const MyContents = () => {
 
   const handleModalSubmit = async () => {
     try {
-      await axios.put(`http://localhost:8080/content/update/${editedData.id}`, { date: editedData.date, content: editedData.content });
+      await axios.put(`task-sp-production.up.railway.app/content/update/${editedData.id}`, { date: editedData.date, content: editedData.content });
       setModalOpen(false);
       // Refresh contents after update (optional)
-      const updatedContents = await axios.get('http://localhost:8080/content/');
+      const updatedContents = await axios.get('task-sp-production.up.railway.app/content/');
       setContents(updatedContents.data);
       console.log(`Content with ID ${editedData.id} updated successfully`);
     } catch (error) {

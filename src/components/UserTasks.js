@@ -16,7 +16,7 @@ const UserTasks = () => {
   const fetchTasks = () => {
     const uname = localStorage.getItem("username")
     console.log(uname); 
-    axios.get(`http://localhost:8080/task/${uname}`)
+    axios.get(`task-sp-production.up.railway.app/task/${uname}`)
       .then(response => {
         console.log("res",response.data);
         setTasks(response.data);    
