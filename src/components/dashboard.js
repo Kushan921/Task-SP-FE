@@ -5,14 +5,29 @@ import PagesTasks from "./PagesTasks";
 import AddUser from "./AddUser";
 import TaskForm from "./TaskForm";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+// Uncomment if API_BASE_URL is used elsewhere
+// const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export default function Dashboard() {
-  
   let navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [selectedField, setSelectedField] = useState("home");
-  
+  const [selectedField, setSelectedField] = useState("");
+
+  const renderContent = () => {
+    switch (selectedField) {
+      case "designers":
+        return <DesignerTasks />;
+      case "pages":
+        return <PagesTasks />;
+      case "user":
+        return <AddUser />;
+      case "addtask":
+        return <TaskForm />;
+      default:
+        return <div className="text-gray-100">Select an option from the sidebar</div>;
+    }
+  };
+
   return (
     <div className="flex">
       <div
@@ -43,104 +58,41 @@ export default function Dashboard() {
 
           <div className="flex-1">
             <ul className="pt-2 pb-4 space-y-1 text-sm">
-              
-              <li className="rounded-sm">
-                <button
-                  onClick={() => setSelectedField("designers")}
-                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+              {[
+                { key: "designers", label: "Designer" },
+                { key: "pages", label: "Pages" },
+                { key: "user", label: "Add User" },
+                { key: "addtask", label: "Add Task" }
+              ].map(({ key, label }) => (
+                <li className="rounded-sm" key={key}>
+                  <button
+                    onClick={() => setSelectedField(key)}
+                    className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                  <span className="text-gray-100">Designer</span>
-                </button>
-              </li>
-              <li className="rounded-sm">
-                <button
-                  onClick={() => setSelectedField("pages")}
-                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                  <span className="text-gray-100">Pages</span>
-                </button>
-              </li>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6 text-gray-100"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                      />
+                    </svg>
+                    <span className="text-gray-100">{label}</span>
+                  </button>
+                </li>
+              ))}
 
-              <li className="rounded-sm">
-                <button
-                  onClick={() => setSelectedField("user")}
-                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                  <span className="text-gray-100">Add User</span>
-                </button>
-              </li>
-
-              <li className="rounded-sm">
-                <button
-                  onClick={() => setSelectedField("addtask")}
-                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                  <span className="text-gray-100">Add Task</span>
-                </button>
-              </li>
-             
               <li className="rounded-sm">
                 <button
                   onClick={() => {
                     navigate("/login");
-                    localStorage.removeItem("username")
-                   
+                    localStorage.removeItem("username");
                   }}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                 >
@@ -165,13 +117,10 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-     
-        {selectedField === "designers" ? <DesignerTasks /> : null}
-        {selectedField === "pages" ? <PagesTasks /> : null}
-        {selectedField === "user" ? <AddUser /> : null}
-        {selectedField === "addtask" ? <TaskForm /> : null}
 
+      <div className="flex-grow p-4">
+        {renderContent()}
       </div>
-    
+    </div>
   );
 }

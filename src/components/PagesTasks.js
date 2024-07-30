@@ -5,14 +5,13 @@ import moment from 'moment';
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const PagesTasks = () => {
-  // State to store the fetched data
-  const [scheduleData, setScheduleData] = useState([]);
+  const [scheduleData, setScheduleData] = useState({});
   const [designers, setDesigners] = useState([]);
-
+  
   // Function to fetch data from the URL
   const fetchData = async () => {
     try {
-      const response = await axios.get(`API_BASE_URL/task/`);
+      const response = await axios.get(`${API_BASE_URL}/task/`);
       const currentWeekTasks = filterCurrentWeekTasks(response.data);
       const groupedByDesigner = groupTasksByDesigner(currentWeekTasks);
       setDesigners(Object.keys(groupedByDesigner));
@@ -62,35 +61,42 @@ const PagesTasks = () => {
     fetchData();
   }, []);
 
-  // Render the table with fetched data
+  const weekDates = generateWeekDates();
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
         <thead>
           <tr className="bg-gray-50">
             <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Page</th>
-            {generateWeekDates().map((date, index) => (
+            {weekDates.map((date, index) => (
               <th key={index} className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{date}</th>
             ))}
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {Object.keys(scheduleData).map((page, pageIndex) => (
-            Object.entries(scheduleData[page]).map(([date, tasks], dateIndex) => (
-              <tr key={`${page}-${date}-${dateIndex}`} className={pageIndex % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
-                {dateIndex === 0 && (
-                  <td className="py-4 px-6 text-left text-sm font-medium text-gray-900" rowSpan={Object.keys(scheduleData[page]).length}>{page}</td>
-                )}
-                {generateWeekDates().map((weekDate, weekIndex) => (
-                  <td key={weekIndex} className="py-4 px-6 text-left text-sm text-gray-500">
-                    {tasks.filter(task => moment(task.date).format('dddd, MMM Do') === weekDate).map((task, taskIndex) => (
-                      <div key={taskIndex}>{task}</div>
-                    ))}
-                  </td>
-                ))}
-              </tr>
+          {designers.length === 0 ? (
+            <tr>
+              <td colSpan={weekDates.length + 1} className="py-4 px-6 text-center text-sm text-gray-500">No tasks available</td>
+            </tr>
+          ) : (
+            Object.keys(scheduleData).map((designer, designerIndex) => (
+              Object.entries(scheduleData[designer]).map(([date, tasks], dateIndex) => (
+                <tr key={`${designer}-${date}`} className={designerIndex % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
+                  {dateIndex === 0 && (
+                    <td className="py-4 px-6 text-left text-sm font-medium text-gray-900" rowSpan={Object.keys(scheduleData[designer]).length}>{designer}</td>
+                  )}
+                  {weekDates.map((weekDate, weekIndex) => (
+                    <td key={weekIndex} className="py-4 px-6 text-left text-sm text-gray-500">
+                      {tasks.filter(task => moment(task.date).format('dddd, MMM Do') === weekDate).map((task, taskIndex) => (
+                        <div key={taskIndex}>{task}</div>
+                      ))}
+                    </td>
+                  ))}
+                </tr>
+              ))
             ))
-          ))}
+          )}
         </tbody>
       </table>
     </div>

@@ -4,32 +4,44 @@ import { toast } from 'react-toastify';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-
 const AddContent = () => {
+  const [formData, setFormData] = useState({
+    date: '',
+    content: ''
+  });
 
-  const [formData,setFormData] = useState({
-    
-    date:'',
-    content:''
-    
-  })
-
-  function handleChange(e){
-    setFormData({...formData,[e.target.name]:e.target.value})
+  function handleChange(e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    const username = localStorage.getItem('username'); // Retrieve username from localStorage
+    const username = localStorage.getItem('username');
+    
+    if (!username) {
+      toast.error('Username not found. Please log in.', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+      });
+      return;
+    }
+
     const dataToSend = {
       ...formData,
-      username: username // Add username to the form data
+      username: username
     };
+    
     console.log(dataToSend);
+    
     axios.post(`${API_BASE_URL}/content/add`, dataToSend)
       .then((res) => {
         console.log(res);
-        toast.success('Content Added Successfully:', {
+        toast.success('Content Added Successfully', {
           position: 'top-right',
           autoClose: 3000,
           hideProgressBar: true,
@@ -44,6 +56,7 @@ const AddContent = () => {
         });
       })
       .catch((error) => {
+        console.error(error);
         toast.error('Error submitting form data', {
           position: 'top-right',
           autoClose: 3000,
@@ -55,11 +68,9 @@ const AddContent = () => {
         });
       });
   }
-  
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto mt-24 p-8 bg-white rounded-lg shadow-md h-96" style={{width:'40%'}}>
-     
+    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto mt-24 p-8 bg-white rounded-lg shadow-md h-96" style={{ width: '40%' }}>
       <div className="mb-4">
         <label htmlFor="date" className="block text-sm font-medium text-gray-700">
           Date
@@ -74,7 +85,7 @@ const AddContent = () => {
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="task" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="content" className="block text-sm font-medium text-gray-700">
           Content
         </label>
         <textarea

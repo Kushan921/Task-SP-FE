@@ -1,8 +1,11 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Navigation = () => {
+  const location = useLocation();
+
   return (
     <div className="bg-gray-800 h-screen w-64 fixed left-0 top-0 overflow-y-auto">
       <div className="p-4">
@@ -11,13 +14,31 @@ const Navigation = () => {
       <nav>
         <ul className="space-y-2">
           <li>
-            <a href="/designertasks" className="block p-4 text-gray-300 hover:bg-gray-700">Designers</a>
+            <Link
+              to="/designertasks"
+              className={`block p-4 text-gray-300 hover:bg-gray-700 ${location.pathname === '/designertasks' ? 'bg-gray-700' : ''}`}
+              aria-label="Designers"
+            >
+              Designers
+            </Link>
           </li>
           <li>
-            <a href="#" className="block p-4 text-gray-300 hover:bg-gray-700">Pages</a>
+            <Link
+              to="/pages"
+              className={`block p-4 text-gray-300 hover:bg-gray-700 ${location.pathname === '/pages' ? 'bg-gray-700' : ''}`}
+              aria-label="Pages"
+            >
+              Pages
+            </Link>
           </li>
           <li>
-            <a href="#" className="block p-4 text-gray-300 hover:bg-gray-700">Add User</a>
+            <Link
+              to="/adduser"
+              className={`block p-4 text-gray-300 hover:bg-gray-700 ${location.pathname === '/adduser' ? 'bg-gray-700' : ''}`}
+              aria-label="Add User"
+            >
+              Add User
+            </Link>
           </li>
         </ul>
       </nav>

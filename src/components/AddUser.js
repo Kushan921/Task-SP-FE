@@ -8,7 +8,7 @@ const AddUser = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    role:''
+    role: ''
   });
 
   function handleChange(e) {
@@ -17,13 +17,11 @@ const AddUser = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData.role);
     axios
       .post(`${API_BASE_URL}/user/add`, formData)
       .then((res) => {
         console.log(res);
-
-        toast.success('User Added Successfully:', {
+        toast.success('User Added Successfully', {
           position: 'top-right',
           autoClose: 3000,
           hideProgressBar: true,
@@ -34,7 +32,8 @@ const AddUser = () => {
         });
         setFormData({
           username: '',
-          password: ''
+          password: '',
+          role: '' // Ensure role is also reset
         });
       })
       .catch((error) => {
@@ -53,10 +52,9 @@ const AddUser = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      
-      className="max-w-md mx-auto mt-20 p-8 bg-white rounded-lg shadow-md w-96 h-2/3" 
+      className="max-w-md mx-auto mt-20 p-8 bg-white rounded-lg shadow-md w-96 h-2/3"
     >
-      <h1 className='font-bold mb-8 text-3xl' style={{color:"#095678"}}>Add User</h1>
+      <h1 className='font-bold mb-8 text-3xl' style={{ color: "#095678" }}>Add User</h1>
       <div className="mb-4">
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
           Username
@@ -84,11 +82,18 @@ const AddUser = () => {
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="page" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="role" className="block text-sm font-medium text-gray-700">
           User Role
         </label>
-        <select name="role" id="role" onChange={handleChange} value={formData.role} className='w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'>
-          <option>- User Role -</option>
+        <select 
+          name="role" 
+          id="role" 
+          onChange={handleChange} 
+          value={formData.role} 
+          className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          defaultValue="" // Prevent the initial placeholder from being submitted
+        >
+          <option value="" disabled>- User Role -</option>
           <option value="graphic">Graphic Designer</option>
           <option value="content">Content Writer</option>
           <option value="admin">Admin</option>
@@ -97,7 +102,7 @@ const AddUser = () => {
       <div className="flex justify-center">
         <button
           type="submit"
-          className="inline-flex items-center px-4 py-2 mt-8  border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="inline-flex items-center px-4 py-2 mt-8 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Submit
         </button>

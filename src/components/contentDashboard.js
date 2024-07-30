@@ -3,14 +3,11 @@ import { useNavigate } from "react-router-dom";
 import AddContent from "./addContent";
 import MyContents from "./myContents";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
 export default function Contentdashboard() {
-  
   let navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("home");
-  
+
   return (
     <div className="flex">
       <div
@@ -41,7 +38,6 @@ export default function Contentdashboard() {
 
           <div className="flex-1">
             <ul className="pt-2 pb-4 space-y-1 text-sm">
-              
               <li className="rounded-sm">
                 <button
                   onClick={() => setSelectedField("content")}
@@ -87,15 +83,12 @@ export default function Contentdashboard() {
                   <span className="text-gray-100">My Contents</span>
                 </button>
               </li>
-              
 
-             
               <li className="rounded-sm">
                 <button
                   onClick={() => {
                     navigate("/login");
-                    localStorage.removeItem("username")
-                   
+                    localStorage.removeItem("username");
                   }}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                 >
@@ -120,13 +113,11 @@ export default function Contentdashboard() {
           </div>
         </div>
       </div>
-     
-        
-        {selectedField === "content" ? <AddContent /> : null}
-        {selectedField === "mycontent" ? <MyContents/> : null}
-       
 
+      <div className="flex-grow p-4">
+        {selectedField === "content" && <AddContent />}
+        {selectedField === "mycontent" && <MyContents />}
       </div>
-    
+    </div>
   );
 }

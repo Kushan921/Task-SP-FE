@@ -12,34 +12,36 @@ const MyContents = () => {
   const username = localStorage.getItem('username');
 
   useEffect(() => {
-    console.log("s",username);
-    axios.get(`API_BASE_URL/content/${username}`) 
-      .then(response => {
-        console.log(response);
-        console.log(response.data);
-        setContents(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching contents:', error);
-      });
+    if (username) {
+      axios.get(`${API_BASE_URL}/content/${username}`)
+        .then(response => {
+          setContents(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching contents:', error);
+        });
+    } else {
+      console.error('Username not found in localStorage');
+    }
   }, [username]);
 
   const handleUpdate = (id) => {
     const contentToUpdate = contents.find(content => content._id === id);
-    setEditedData({ id: contentToUpdate._id, date: contentToUpdate.date, content: contentToUpdate.content });
-    setModalOpen(true);
+    if (contentToUpdate) {
+      setEditedData({ id: contentToUpdate._id, date: contentToUpdate.date, content: contentToUpdate.content });
+      setModalOpen(true);
+    }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     setContentToDelete(id);
     setDeleteConfirmationOpen(true);
   };
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`API_BASE_URL/content/delete/${contentToDelete}`);
+      await axios.delete(`${API_BASE_URL}/content/delete/${contentToDelete}`);
       setContents(prevContents => prevContents.filter(content => content._id !== contentToDelete));
-      console.log(`Content with ID ${contentToDelete} deleted successfully`);
     } catch (error) {
       console.error('Error deleting content:', error);
     }
@@ -48,20 +50,17 @@ const MyContents = () => {
 
   const handleModalSubmit = async () => {
     try {
-      await axios.put(`API_BASE_URL/content/update/${editedData.id}`, { date: editedData.date, content: editedData.content });
+      await axios.put(`${API_BASE_URL}/content/update/${editedData.id}`, { date: editedData.date, content: editedData.content });
       setModalOpen(false);
-      // Refresh contents after update (optional)
-      const updatedContents = await axios.get(`API_BASE_URL/content/`);
+      const updatedContents = await axios.get(`${API_BASE_URL}/content/${username}`);
       setContents(updatedContents.data);
-      console.log(`Content with ID ${editedData.id} updated successfully`);
     } catch (error) {
       console.error('Error updating content:', error);
     }
   };
 
   return (
-    
-    <div className="w-full overflow-x-auto m-8" >
+    <div className="w-full overflow-x-auto m-8">
       <table className="w-full bg-white divide-y divide-gray-200 rounded-lg overflow-hidden shadow-lg">
         <thead className="bg-gray-800 text-white">
           <tr>
@@ -77,9 +76,9 @@ const MyContents = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">
-          {contents.map(content => (
+          {contents.length > 0 ? contents.map(content => (
             <tr key={content._id} className="bg-gray-50 hover:bg-gray-100">
-              <td className="px-6 py-4  text-sm text-gray-900 ">{content.date}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{content.date}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{content.content}</td>
               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <button
@@ -96,7 +95,11 @@ const MyContents = () => {
                 </button>
               </td>
             </tr>
-          ))}
+          )) : (
+            <tr>
+              <td colSpan="3" className="px-6 py-4 text-center text-sm text-gray-500">No contents available</td>
+            </tr>
+          )}
         </tbody>
       </table>
       {modalOpen && (
@@ -150,7 +153,7 @@ const MyContents = () => {
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
                 >
                   Update
-                </button> 
+                </button>
                 <button
                   onClick={() => setModalOpen(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
@@ -161,7 +164,8 @@ const MyContents = () => {
             </div>
           </div>
         </div>
-      )}{deleteConfirmationOpen && (
+      )}
+      {deleteConfirmationOpen && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -187,7 +191,7 @@ const MyContents = () => {
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                 >
                   Delete
-                </button> 
+                </button>
                 <button
                   onClick={() => setDeleteConfirmationOpen(false)}
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
@@ -200,7 +204,6 @@ const MyContents = () => {
         </div>
       )}
     </div>
-   
   );
 };
 

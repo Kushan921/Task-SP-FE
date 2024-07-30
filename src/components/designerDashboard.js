@@ -3,19 +3,30 @@ import { useNavigate } from "react-router-dom";
 import DisplayContent from "./DisplayContent";
 import UserTasks from "./UserTasks";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+// Uncomment if API_BASE_URL is used elsewhere
+// const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export default function Designerdashboard() {
-  
   let navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("home");
-  
+
+  const renderContent = () => {
+    switch (selectedField) {
+      case "contents":
+        return <DisplayContent />;
+      case "tasks":
+        return <UserTasks />;
+      default:
+        return <div className="text-gray-100">Select an option from the sidebar</div>;
+    }
+  };
+
   return (
     <div className="flex">
       <div
         className={` ${
-          open ? "w-40" : "w-60 "
+          open ? "w-40" : "w-60"
         } flex flex-col h-screen p-3 bg-gray-800 shadow duration-300`}
       >
         <div className="space-y-3">
@@ -29,6 +40,7 @@ export default function Designerdashboard() {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 strokeWidth={2}
+                aria-label="Toggle sidebar"
               >
                 <path
                   strokeLinecap="round"
@@ -41,59 +53,40 @@ export default function Designerdashboard() {
 
           <div className="flex-1">
             <ul className="pt-2 pb-4 space-y-1 text-sm">
-              
-              <li className="rounded-sm">
-                <button
-                  onClick={() => setSelectedField("tasks")}
-                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+              {[
+                { key: "tasks", label: "Today Tasks" },
+                { key: "contents", label: "Contents" },
+              ].map(({ key, label }) => (
+                <li className="rounded-sm" key={key}>
+                  <button
+                    onClick={() => setSelectedField(key)}
+                    className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                  <span className="text-gray-100">Today Tasks</span>
-                </button>
-              </li>
-              <li className="rounded-sm">
-                <button
-                  onClick={() => setSelectedField("contents")}
-                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 text-gray-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                  <span className="text-gray-100">Contents</span>
-                </button>
-              </li>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6 text-gray-100"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-label={label}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                      />
+                    </svg>
+                    <span className="text-gray-100">{label}</span>
+                  </button>
+                </li>
+              ))}
 
-             
               <li className="rounded-sm">
                 <button
                   onClick={() => {
                     navigate("/login");
-                    localStorage.removeItem("username")
-                   
+                    localStorage.removeItem("username");
                   }}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                 >
@@ -104,6 +97,7 @@ export default function Designerdashboard() {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth={2}
+                    aria-label="Logout"
                   >
                     <path
                       strokeLinecap="round"
@@ -118,12 +112,10 @@ export default function Designerdashboard() {
           </div>
         </div>
       </div>
-     
-        {selectedField === "contents" ? <DisplayContent/> : null}
-        {selectedField === "tasks" ? <UserTasks /> : null}
-       
 
+      <div className="flex-grow p-4">
+        {renderContent()}
       </div>
-    
+    </div>
   );
 }
