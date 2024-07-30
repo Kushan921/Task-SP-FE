@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const AddContent = () => {
 
@@ -24,7 +26,7 @@ const AddContent = () => {
       username: username // Add username to the form data
     };
     console.log(dataToSend);
-    axios.post('task-sp-production.up.railway.app/content/add', dataToSend)
+    axios.post(`${API_BASE_URL}/content/add`, dataToSend)
       .then((res) => {
         console.log(res);
         toast.success('Content Added Successfully:', {

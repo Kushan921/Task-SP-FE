@@ -5,6 +5,8 @@ import moment from 'moment';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css'; // Import your custom CSS file
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const UserTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -16,7 +18,7 @@ const UserTasks = () => {
   const fetchTasks = () => {
     const uname = localStorage.getItem("username")
     console.log(uname); 
-    axios.get(`task-sp-production.up.railway.app/task/${uname}`)
+    axios.get(`API_BASE_URL/task/${uname}`)
       .then(response => {
         console.log("res",response.data);
         setTasks(response.data);    

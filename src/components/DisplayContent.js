@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Content.css'; 
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+
 const DisplayContent = () => {
   const [contents, setContents] = useState([]);
   const [pickedTasks, setPickedTasks] = useState({});
@@ -27,7 +30,7 @@ const DisplayContent = () => {
   const fetchContentsForToday = async () => {
     try {
       // Make a GET request to fetch contents for today
-      const response = await axios.get('task-sp-production.up.railway.app/content/');
+      const response = await axios.get(`${API_BASE_URL}/content/`);
       setContents(response.data);
     } catch (error) {
       console.error('Error fetching contents:', error);

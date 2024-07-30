@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const TaskForm = () => {
 
@@ -20,7 +21,7 @@ const TaskForm = () => {
   function handleSubmit(e){
     e.preventDefault();
 console.log(formData);
-    axios.post('task-sp-production.up.railway.app/task/add',formData).then((res)=>{
+    axios.post(`API_BASE_URL/task/add`,formData).then((res)=>{
       console.log(res);
       
        toast.success('Task Added Successfully:',{

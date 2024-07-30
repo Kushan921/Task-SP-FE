@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AddContent from "./addContent";
 import MyContents from "./myContents";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export default function Contentdashboard() {
   

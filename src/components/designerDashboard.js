@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import DisplayContent from "./DisplayContent";
 import UserTasks from "./UserTasks";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export default function Designerdashboard() {
   
   let navigate = useNavigate();

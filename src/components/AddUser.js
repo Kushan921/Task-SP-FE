@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const AddUser = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -17,7 +19,7 @@ const AddUser = () => {
     e.preventDefault();
     console.log(formData.role);
     axios
-      .post('task-sp-production.up.railway.app/user/add', formData)
+      .post(`${API_BASE_URL}/user/add`, formData)
       .then((res) => {
         console.log(res);
 

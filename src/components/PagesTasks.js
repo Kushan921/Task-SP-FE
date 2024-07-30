@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const PagesTasks = () => {
   // State to store the fetched data
   const [scheduleData, setScheduleData] = useState([]);
@@ -10,7 +12,7 @@ const PagesTasks = () => {
   // Function to fetch data from the URL
   const fetchData = async () => {
     try {
-      const response = await axios.get('task-sp-production.up.railway.app/task/');
+      const response = await axios.get(`API_BASE_URL/task/`);
       const currentWeekTasks = filterCurrentWeekTasks(response.data);
       const groupedByDesigner = groupTasksByDesigner(currentWeekTasks);
       setDesigners(Object.keys(groupedByDesigner));

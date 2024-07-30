@@ -3,14 +3,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Login = () => {
-
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    
   });
 
   function handleChange(e) {
@@ -20,13 +19,13 @@ const Login = () => {
   function handleSubmit(e) {
     e.preventDefault();
     console.log(formData);
-    
-    axios.post('task-sp-production.up.railway.app/user/login', formData)
+
+    axios.post(`${API_BASE_URL}/user/login`, formData)
       .then((res) => {
         const role = res.data.role;
         toast.success('Login successful');
         localStorage.setItem("username", formData.username);
-        
+
         if (role === 'graphic') {
           navigate("/designerdashboard"); 
         } else if (role === 'content') {
@@ -40,13 +39,11 @@ const Login = () => {
         toast.error('Login failed');
       });
   }
-  
 
   return (
     <form onSubmit={handleSubmit} className="mt-44 max-w-md mt-32 mx-auto p-8 bg-white rounded-lg shadow-md">
       <h1 className='font-bold mb-8 text-3xl' style={{color:"#095678"}}>Login</h1>
       <div className="mb-4">
-        
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
           Username
         </label>

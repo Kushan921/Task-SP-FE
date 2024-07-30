@@ -1,5 +1,7 @@
 import React from 'react';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Navigation = () => {
   return (
     <div className="bg-gray-800 h-screen w-64 fixed left-0 top-0 overflow-y-auto">

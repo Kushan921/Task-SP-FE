@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const MyContents = () => {
   const [contents, setContents] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -11,7 +13,7 @@ const MyContents = () => {
 
   useEffect(() => {
     console.log("s",username);
-    axios.get(`task-sp-production.up.railway.app/content/${username}`) 
+    axios.get(`API_BASE_URL/content/${username}`) 
       .then(response => {
         console.log(response);
         console.log(response.data);
@@ -35,7 +37,7 @@ const MyContents = () => {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`task-sp-production.up.railway.app/content/delete/${contentToDelete}`);
+      await axios.delete(`API_BASE_URL/content/delete/${contentToDelete}`);
       setContents(prevContents => prevContents.filter(content => content._id !== contentToDelete));
       console.log(`Content with ID ${contentToDelete} deleted successfully`);
     } catch (error) {
@@ -46,10 +48,10 @@ const MyContents = () => {
 
   const handleModalSubmit = async () => {
     try {
-      await axios.put(`task-sp-production.up.railway.app/content/update/${editedData.id}`, { date: editedData.date, content: editedData.content });
+      await axios.put(`API_BASE_URL/content/update/${editedData.id}`, { date: editedData.date, content: editedData.content });
       setModalOpen(false);
       // Refresh contents after update (optional)
-      const updatedContents = await axios.get('task-sp-production.up.railway.app/content/');
+      const updatedContents = await axios.get(`API_BASE_URL/content/`);
       setContents(updatedContents.data);
       console.log(`Content with ID ${editedData.id} updated successfully`);
     } catch (error) {
